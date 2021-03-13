@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/devfeel/mapper"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,10 +15,18 @@ import (
 	"strings"
 )
 
-var LTURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/shsj/common"
-var LOGINURL = "https://sso.hitsz.edu.cn:7002/cas/login?service=http://xgsm.hitsz.edu.cn/zhxy-xgzs/common/casLogin?params=L3hnX21vYmlsZS94c0hvbWU="
-var HISTORYREPORT = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxxList"
-var COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
+var (
+	LTURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/shsj/common"
+	LOGINURL = "https://sso.hitsz.edu.cn:7002/cas/login?service=http://xgsm.hitsz.edu.cn/zhxy-xgzs/common/casLogin?params=L3hnX21vYmlsZS94c0hvbWU="
+	POSTID = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/csh"
+	REPORT = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
+	COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
+)
+
+func init() {
+	mapper.Register(&model.ReportData{})
+	mapper.Register(&model.ModelData{})
+}
 
 func getLt(client http.Client) (string, error) {
 	resp, err := client.Get(LTURL)
@@ -75,12 +84,34 @@ func Login(account, password string) error {
 		log.Println("登录失败！")
 		return errors.New("login error")
 	}
-	// 获取每日上报历史信息
-	req, err := http.NewRequest("POST", HISTORYREPORT, nil)
+	// 获取每日上报 id
+	req, err := http.NewRequest("POST", POSTID, nil)
 	if err != nil {
 		return err
 	}
 	resp, err = client.Do(req)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	body, _ = ioutil.ReadAll(resp.Body)
+	var commitResult model.CommitResult
+	err = json.Unmarshal(body, &commitResult)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	id := commitResult.Module
+	// 点击 “新增“，获取默认信息
+	reportId, err := json.Marshal(model.ID{id})
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	params = url.Values{
+		"info": {string(reportId)},
+	}
+	resp, err = client.Post(REPORT, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
 	if err != nil {
 		log.Println(err)
 		return err
@@ -92,9 +123,41 @@ func Login(account, password string) error {
 		log.Println(err)
 		return err
 	}
-	lastCommit := resultData.Module.Data[0]
-	log.Println(lastCommit)
-	// 利用上一次的疫情上报信息发送数据
-
+	content := resultData.Module.Data[0]
+	commitData := commit(&content)
+	log.Println(commitData)
+	// 提交
+	cd, err := json.Marshal(commitData)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	params = url.Values{
+		"info": {string(cd)},
+	}
+	resp, err = client.Post(COMMITURL, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	body, _ = ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(body, &commitResult)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	log.Println(commitResult)
 	return nil
+}
+
+/**
+利用默认的信息构造提交数据
+*/
+func commit(reportData *model.ReportData) model.CommitData {
+	modelData := &model.ModelData{}
+	mapper.Mapper(reportData, modelData)
+	commitData := model.CommitData{
+		Model: *modelData,
+	}
+	return commitData
 }

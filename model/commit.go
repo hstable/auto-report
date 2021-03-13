@@ -1,39 +1,49 @@
 package model
 
 type ModelData struct {
-	id string `json:"id"`
-	stzkm string `json:"stzkm"`
-	dqszd string `json:"dqszd"`
-	hwgj string `json:"hwgj"`
-	hwcs string `json:"hwcs"`
-	hwxxdz string `json:"hwxxdz"`
-	dqszdsheng string `json:"dqszdsheng"`
-	dqszdshi string `json:"dqszdshi"`
-	dqszdqu string `json:"dqszdqu"`
-	gnxxdz string `json:"gnxxdz"`
-	dqztm string `json:"dqztm"`
-	dqztbz string `json:"dqztbz"`
-	brfsgktt string `json:"brfsgktt"`
-	brzgtw string `json:"brzgtw"`
-	brsfjy string `json:"brsfjy"`
-	brjyyymc string `json:"brjyyymc"`
-	brzdjlm string `json:"brzdjlm"`
-	brzdjlbz string `json:"brzdjlbz"`
-	qtbgsx string `json:"qtbgsx"`
-	sffwwhhb string `json:"sffwwhhb"`
-	sftjwhjhb string `json:"sftjwhjhb"`
-	tcyhbwhrysfjc string `json:"tcyhbwhrysfjc"`
-	sftzrychbwhhl string `json:"sftzrychbwhhl"`
-	sfjdwhhbry string `json:"sfjdwhhbry"`
-	tcjtfs string `json:"tcjtfs"`
-	tchbcc string `json:"tchbcc"`
-	tccx string `json:"tccx"`
-	tczwh string `json:"tczwh"`
-	tcjcms string `json:"tcjcms"`
-	gpsxx string `json:"gpsxx"`
-	sfjcqthbwhry string `json:"sfjcqthbwhry"`
-	sfjcqthbwhrybz string `json:"sfjcqthbwhrybz"`
-	tcjtfsbz string `json:"tcjtfsbz"`
+	Id string `json:"id"`
+	Stzkm string `json:"stzkm"`
+	Dqszd string `json:"dqszd"`
+	Hwgj string `json:"hwgj"`
+	Hwcs string `json:"hwcs"`
+	Hwxxdz string `json:"hwxxdz"`
+	Dqszdsheng string `json:"dqszdsheng"`
+	Dqszdshi string `json:"dqszdshi"`
+	Dqszdqu string `json:"dqszdqu"`
+	Gnxxdz string `json:"gnxxdz"`
+	Dqztm string `json:"dqztm"`
+	Dqztbz string `json:"dqztbz"`
+	Brfsgktt string `json:"brfsgktt"`
+	Brzgtw string `json:"brzgtw"`
+	Brsfjy string `json:"brsfjy"`
+	Brjyyymc string `json:"brjyyymc"`
+	Brzdjlm string `json:"brzdjlm"`
+	Brzdjlbz string `json:"brzdjlbz"`
+	Qtbgsx string `json:"qtbgsx"`
+	Sffwwhhb string `json:"sffwwhhb"`
+	Sftjwhjhb string `json:"sftjwhjhb"`
+	Tcyhbwhrysfjc string `json:"tcyhbwhrysfjc"`
+	Sftzrychbwhhl string `json:"sftzrychbwhhl"`
+	Sfjdwhhbry string `json:"sfjdwhhbry"`
+	Tcjtfs string `json:"tcjtfs"`
+	Tchbcc string `json:"tchbcc"`
+	Tccx string `json:"tccx"`
+	Tczwh string `json:"tczwh"`
+	Tcjcms string `json:"tcjcms"`
+	Gpsxx string `json:"gpsxx"`
+	Sfjcqthbwhry string `json:"sfjcqthbwhry"`
+	Sfjcqthbwhrybz string `json:"sfjcqthbwhrybz"`
+	Tcjtfsbz string `json:"tcjtfsbz"`
+}
+
+type ID struct {
+	Id string `json:"id"`
+}
+
+type CommitResult struct {
+	IsSuccess bool `json:"isSuccess"`
+	Module string `json:"module"`
+	Msg string `json:"msg"`
 }
 
 type CommitData struct {
