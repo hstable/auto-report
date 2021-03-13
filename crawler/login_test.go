@@ -17,6 +17,5 @@ func TestGetLt(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	err := Login("20S051030", "")
-	fmt.Println(err)
+	fmt.Println("")
 }

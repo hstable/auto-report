@@ -2,7 +2,6 @@ package crawler
 
 import (
 	"auto-report/model"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/devfeel/mapper"
@@ -46,7 +45,7 @@ func getLt(client http.Client) (string, error) {
 	return lt, nil
 }
 
-func Login(account, password string) error {
+func Login(account, password string) (http.Client, error) {
 	jar, _ := cookiejar.New(nil)
 	var client = http.Client{
 		Jar: jar,
@@ -54,7 +53,7 @@ func Login(account, password string) error {
 	lt, err := getLt(client)
 	if err != nil {
 		log.Println(err)
-		return err
+		return client, err
 	}
 	params := url.Values{
 		"username":    {account},
@@ -69,95 +68,20 @@ func Login(account, password string) error {
 	resp, err := client.Post(LOGINURL, "application/x-www-form-urlencoded", strings.NewReader(params.Encode()))
 	if err != nil {
 		log.Println(err)
-		return err
+		return client, err
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return err
+		return client, err
 	}
 	bodyContent := string(body)
 	if strings.Contains(bodyContent, "每日上报") {
 		log.Println("登录成功！")
 	} else {
 		log.Println("登录失败！")
-		return errors.New("login error")
+		return client, errors.New("login error")
 	}
-	// 获取每日上报 id
-	req, err := http.NewRequest("POST", POSTID, nil)
-	if err != nil {
-		return err
-	}
-	resp, err = client.Do(req)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	body, _ = ioutil.ReadAll(resp.Body)
-	var commitResult model.CommitResult
-	err = json.Unmarshal(body, &commitResult)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	id := commitResult.Module
-	// 点击 “新增“，获取默认信息
-	reportId, err := json.Marshal(model.ID{id})
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	params = url.Values{
-		"info": {string(reportId)},
-	}
-	resp, err = client.Post(REPORT, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	body, _ = ioutil.ReadAll(resp.Body)
-	var resultData model.ResultData
-	err = json.Unmarshal(body, &resultData)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	content := resultData.Module.Data[0]
-	commitData := commit(&content)
-	log.Println(commitData)
-	// 提交
-	cd, err := json.Marshal(commitData)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	params = url.Values{
-		"info": {string(cd)},
-	}
-	resp, err = client.Post(COMMITURL, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	body, _ = ioutil.ReadAll(resp.Body)
-	err = json.Unmarshal(body, &commitResult)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	log.Println(commitResult)
-	return nil
-}
-
-/**
-利用默认的信息构造提交数据
-*/
-func commit(reportData *model.ReportData) model.CommitData {
-	modelData := &model.ModelData{}
-	mapper.Mapper(reportData, modelData)
-	commitData := model.CommitData{
-		Model: *modelData,
-	}
-	return commitData
+	return client, nil
 }
