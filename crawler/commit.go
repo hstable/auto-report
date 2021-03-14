@@ -14,28 +14,32 @@ import (
 /**
 自动上报
 */
-func Commit(username, password string) error {
+func Report(username, password string) (bool, error) {
 	// 获取每日上报 Id
 	client, err := Login(username, password)
 	if err != nil {
 		log.Println(err)
-		return err
+		return false, err
 	}
 	// 获取每日上报 Id
 	id, err := getId(client)
 	if err != nil {
 		log.Println(err)
-		return err
+		return false, err
 	}
 	// 点击 “新增“，获取默认信息
 	commitData, err := pressNewButton(client, id)
 	if err != nil {
 		log.Println(err)
-		return err
+		return false, err
 	}
 	// 提交
-	commitInfo(client, commitData)
-	return nil
+	result, err := commit(client, commitData)
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
+	return result.IsSuccess, nil
 }
 
 // 获取每日上报 Id
@@ -85,19 +89,19 @@ func pressNewButton(client http.Client, id string) (model.CommitData, error) {
 		return model.CommitData{}, err
 	}
 	content := resultData.Module.Data[0]
-	commitData := commit(&content)
-	log.Println(commitData)
+	commitData := genCommitData(&content)
 	return commitData, nil
 }
 
 /**
 提交
 */
-func commitInfo(client http.Client, commitData model.CommitData) error {
+func commit(client http.Client, commitData model.CommitData) (model.CommitResult, error) {
+	var commitResult model.CommitResult
 	cd, err := json.Marshal(commitData)
 	if err != nil {
 		log.Println(err)
-		return err
+		return commitResult, err
 	}
 	params := url.Values{
 		"info": {string(cd)},
@@ -105,23 +109,21 @@ func commitInfo(client http.Client, commitData model.CommitData) error {
 	resp, err := client.Post(COMMITURL, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
 	if err != nil {
 		log.Println(err)
-		return err
+		return commitResult, err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	var commitResult model.CommitResult
 	err = json.Unmarshal(body, &commitResult)
 	if err != nil {
 		log.Println(err)
-		return err
+		return commitResult, err
 	}
-	log.Println(commitResult)
-	return nil
+	return commitResult, nil
 }
 
 /**
 利用默认的信息构造提交数据
 */
-func commit(reportData *model.ReportData) model.CommitData {
+func genCommitData(reportData *model.ReportData) model.CommitData {
 	modelData := &model.ModelData{}
 	mapper.Mapper(reportData, modelData)
 	commitData := model.CommitData{

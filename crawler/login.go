@@ -3,7 +3,6 @@ package crawler
 import (
 	"auto-report/model"
 	"errors"
-	"fmt"
 	"github.com/devfeel/mapper"
 	"io/ioutil"
 	"log"
@@ -41,7 +40,6 @@ func getLt(client http.Client) (string, error) {
 	}
 	template := regexp.MustCompile(`<input.*?type="hidden".*?value="(.*?)".*?/>`)
 	lt := template.FindStringSubmatch(string(body))[1]
-	fmt.Println(lt)
 	return lt, nil
 }
 
