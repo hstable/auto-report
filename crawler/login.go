@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	LTURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/shsj/common"
-	LOGINURL = "https://sso.hitsz.edu.cn:7002/cas/login?service=http://xgsm.hitsz.edu.cn/zhxy-xgzs/common/casLogin?params=L3hnX21vYmlsZS94c0hvbWU="
-	POSTID = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/csh"
-	REPORT = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
+	LTURL     = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/shsj/common"
+	LOGINURL  = "https://sso.hitsz.edu.cn:7002/cas/login?service=http://xgsm.hitsz.edu.cn/zhxy-xgzs/common/casLogin?params=L3hnX21vYmlsZS94c0hvbWU="
+	POSTID    = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/csh"
+	REPORT    = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
 	COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
 )
 
