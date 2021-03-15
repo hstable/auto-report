@@ -17,5 +17,5 @@ func TestGetLt(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	fmt.Println("")
+	login("20S051030", ".")
 }

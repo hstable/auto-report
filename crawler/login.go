@@ -43,7 +43,7 @@ func getLt(client http.Client) (string, error) {
 	return lt, nil
 }
 
-func Login(account, password string) (http.Client, error) {
+func login(account, password string) (http.Client, error) {
 	jar, _ := cookiejar.New(nil)
 	var client = http.Client{
 		Jar: jar,
@@ -78,7 +78,7 @@ func Login(account, password string) (http.Client, error) {
 	if strings.Contains(bodyContent, "每日上报") {
 		log.Println("登录成功！")
 	} else {
-		log.Println("登录失败！")
+		log.Println("登录失败！用户名或密码错误！")
 		return client, errors.New("login error")
 	}
 	return client, nil

@@ -15,8 +15,8 @@ import (
 自动上报
 */
 func Report(username, password string) (bool, error) {
-	// 获取每日上报 Id
-	client, err := Login(username, password)
+	// 登录学校网站
+	client, err := login(username, password)
 	if err != nil {
 		log.Println(err)
 		return false, err
