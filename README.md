@@ -26,6 +26,7 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
    ```
    30 11   *   *    *    docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e your-email
    ```
+By default, this program will run at 11:30 a.m. everyday.
 
 **Github Action**
 
