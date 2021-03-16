@@ -28,7 +28,7 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
 
 3. Add `report.yml` file to `.github/workflows`, and write the following content to this file:
 
-   ```
+   ```yaml
    name: Auto Report
    on: 
      schedule:
