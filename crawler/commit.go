@@ -3,12 +3,15 @@ package crawler
 import (
 	"auto-report/model"
 	"encoding/json"
+	"fmt"
 	"github.com/devfeel/mapper"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 /**
@@ -33,6 +36,8 @@ func Report(username, password string) (bool, error) {
 		log.Println(err)
 		return false, err
 	}
+	// 检查温度信息
+	commitData = checkTemperature(commitData)
 	// 提交
 	result, err := commit(client, commitData)
 	if err != nil {
@@ -40,6 +45,15 @@ func Report(username, password string) (bool, error) {
 		return false, err
 	}
 	return result.IsSuccess, nil
+}
+
+func checkTemperature(commitData model.CommitData) model.CommitData {
+	if commitData.Model.Brzgtw == "" {
+		rand.Seed(time.Now().Unix())
+		temp := fmt.Sprintf("%.1f", 36 + rand.Float32())
+		commitData.Model.Brzgtw = temp
+	}
+	return commitData
 }
 
 // 获取每日上报 Id

@@ -19,7 +19,7 @@ func main() {
 	}
 	if info.Email != "" {
 		// 发送邮件
-		err = email.SendEmail(info.Email, "上报成功!")
+		err = email.SendEmail(info.Email, info.UserName + "\t上报成功!")
 		if err != nil {
 			log.Fatal(err)
 		} else {
