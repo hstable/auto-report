@@ -20,7 +20,14 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
 
 ### Daily Auto Report 
 
-**Action**
+**Crontab and Docker**
+1. You need a server with docker installed.
+2. Use `contab -e` and append the following line:
+   ```
+   30 11   *   *    *    docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e your-email
+   ```
+
+**Github Action**
 
 1. Fork this repository from here.
 
