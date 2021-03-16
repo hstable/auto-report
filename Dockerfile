@@ -1,7 +1,10 @@
-FROM golang:alpine
+FROM golang:alpine AS builder
 ADD . /build/
 WORKDIR /build/
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.io
-RUN go build -o auto-report .
-ENTRYPOINT ./auto-report -u $USERNAME -p $PASSWORD -e $EMAIL
+RUN go build -ldflags "-s -w" -o auto-report .
+
+FROM alpine:latest
+COPY --from=builder /build/auto-report /usr/bin
+ENTRYPOINT ["auto-report"]

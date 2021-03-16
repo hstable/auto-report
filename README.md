@@ -8,19 +8,8 @@ go run main.go -u your-username -p your-password -e your-email
 
 ## Docker
 
-构建镜像：
-
 ```shell
-docker build -t auto-report .
-```
-
-运行：
-
-```shell
- docker run -e USERNAME=your-username \
- -e PASSWORD=your-password \
- -e EMAIL=your-email \
- auto-report
+docker run --rm rocketeerli/auto-report -u your-username -p your-password -e your-email
 ```
 
 ## License
