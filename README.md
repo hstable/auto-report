@@ -20,8 +20,9 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
 
 ### Daily Auto Report 
 
-**Crontab and Docker**
-1. You need a server with docker installed.
+**Crontab**
+
+1. You need a server.
 2. Adjust your local timezone.
    ```shell
    timedatectl set-timezone "Asia/Shanghai"
