@@ -48,9 +48,6 @@ By default, this program will run at 11:30 a.m. everyday.
      push:
        branches: [main]
    
-   env:
-     - EMAIL: ${{ secrets.EMAIL }}
-   
    jobs:
    
      report:
@@ -64,19 +61,26 @@ By default, this program will run at 11:30 a.m. everyday.
          with:
            go-version: 1.15
    
+       - name: Clone
+         run: git clone https://github.com/hstable/auto-report.git
+   
        - name: Build
-         run: go build -o auto-report .
+         run: go build -o autoReport .
            
        - name: Run
+         env:
+           STUDENTID: ${{ secrets.STUDENTID }}
+           PASSWORD: ${{ secrets.PASSWORD }}
+           EMAIL: ${{ secrets.EMAIL }}
          run: |
            if [[ -z $EMAIL ]]
-           then ./auto-report -u ${{ secrets.STUDENTID }} -p ${{ secrets.PASSWORD }}
-           else ./auto-report -u ${{ secrets.STUDENTID }} -p ${{ secrets.PASSWORD }} -e ${{ secrets.EMAIL }}
-           fi
+        then ./autoReport -u $STUDENTID -p $PASSWORD
+           else ./autoReport -u $STUDENTID -p $PASSWORD -e $EMAIL
+        fi
    ```
-
+   
    The time cron above is an UTC time, which is 8 hours slower than Beijing time zone.
-
+   
    By default, this program will run at 11:30 a.m. everyday.
 
 ## License
