@@ -74,9 +74,9 @@ By default, this program will run at 11:30 a.m. everyday.
            EMAIL: ${{ secrets.EMAIL }}
          run: |
            if [[ -z $EMAIL ]]
-        then ./autoReport -u $STUDENTID -p $PASSWORD
+           then ./autoReport -u $STUDENTID -p $PASSWORD
            else ./autoReport -u $STUDENTID -p $PASSWORD -e $EMAIL
-        fi
+           fi
    ```
    
    The time cron above is an UTC time, which is 8 hours slower than Beijing time zone.
