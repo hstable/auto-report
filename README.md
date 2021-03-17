@@ -22,8 +22,12 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
 
 **Crontab and Docker**
 1. You need a server with docker installed.
-2. Use `contab -e` and append the following line:
+2. Adjust your local timezone.
+   ```shell
+   timedatectl set-timezone "Asia/Shanghai"
    ```
+4. Use `contab -e` and append the following line:
+   ```cron
    30 11   *   *    *    docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e your-email
    ```
 By default, this program will run at 11:30 a.m. everyday.
