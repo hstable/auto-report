@@ -28,7 +28,7 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
    ```
 4. Use `crontab -e` and append the following line:
    ```cron
-   30 11   *   *    *    docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e your-email
+   30 11   *   *    *    curl -L -o /tmp/auto-report https://github.com/hstable/auto-report/releases/download/v1.0.0/auto-report_linux_amd64 && chmod +x /tmp/auto-report && /tmp/auto-report -u your-studentID -p your-password -e your-email
    ```
 By default, this program will run at 11:30 a.m. everyday.
 
@@ -36,7 +36,7 @@ By default, this program will run at 11:30 a.m. everyday.
 
 1. Fork this repository from here.
 
-2. Add the repository secrets `STUDENTID`, `PASSWORD` and `EMAIL`  in your own repository's <a href="../../settings/secrets">Settings-Secrets</a>,  which also can be found by `Settings`-> `Secrets` -> `New repository secret `. (Repository secrets are invisible for others.)
+2. Add the repository secrets `STUDENTID`, `PASSWORD` and `EMAIL`  in your own repository's <a href="../../settings/secrets">Settings-Secrets</a>,  which also can be found by `Settings`-> `Secrets` -> `New repository secret`. (Repository secrets are invisible for others.)
 
 3. Add `report.yml` file to `.github/workflows`, and write the following content to this file:
 
@@ -56,16 +56,10 @@ By default, this program will run at 11:30 a.m. everyday.
        steps:
        - uses: actions/checkout@v2
    
-       - name: Set up Go
-         uses: actions/setup-go@v2
-         with:
-           go-version: 1.15
-   
-       - name: Clone
-         run: git clone https://github.com/hstable/auto-report.git
-   
        - name: Build
-         run: go build -o autoReport .
+         run: |
+           curl -L -o auto-report https://github.com/hstable/auto-report/releases/download/v1.0.0/auto-report_linux_amd64
+           chmod +x auto-report
            
        - name: Run
          env:
@@ -74,8 +68,8 @@ By default, this program will run at 11:30 a.m. everyday.
            EMAIL: ${{ secrets.EMAIL }}
          run: |
            if [[ -z $EMAIL ]]
-           then ./autoReport -u $STUDENTID -p $PASSWORD
-           else ./autoReport -u $STUDENTID -p $PASSWORD -e $EMAIL
+           then ./auto-report -u $STUDENTID -p $PASSWORD
+           else ./auto-report -u $STUDENTID -p $PASSWORD -e $EMAIL
            fi
    ```
    
