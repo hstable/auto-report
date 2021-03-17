@@ -26,7 +26,7 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
    ```shell
    timedatectl set-timezone "Asia/Shanghai"
    ```
-4. Use `contab -e` and append the following line:
+4. Use `crontab -e` and append the following line:
    ```cron
    30 11   *   *    *    docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e your-email
    ```
