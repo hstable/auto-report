@@ -55,7 +55,6 @@ By default, this program will run at 11:30 a.m. everyday.
        name: auto report
        runs-on: ubuntu-latest
        steps:
-       - uses: actions/checkout@v2
    
        - name: Build
          run: |
