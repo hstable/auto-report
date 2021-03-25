@@ -29,9 +29,9 @@ docker run --rm rocketeerli/auto-report -u your-studentID -p your-password -e yo
    ```
 4. Use `crontab -e` and append the following line:
    ```cron
-   30 11 * * * curl -L -o /tmp/auto-report https://github.com/hstable/auto-report/releases/latest/download/auto-report_linux_amd64 && chmod +x /tmp/auto-report && /tmp/auto-report -u your-studentID -p your-password -e your-email
+   15 8 * * * curl -L -o /tmp/auto-report https://github.com/hstable/auto-report/releases/latest/download/auto-report_linux_amd64 && chmod +x /tmp/auto-report && /tmp/auto-report -u your-studentID -p your-password -e your-email
    ```
-By default, this program will run at 11:30 a.m. everyday.
+By default, this program will run at 8:15 a.m. everyday.
 
 **Github Action**
 
@@ -45,7 +45,7 @@ By default, this program will run at 11:30 a.m. everyday.
    name: Auto Report
    on: 
      schedule:
-       - cron: "30 3 * * *"
+       - cron: "15 0 * * *"
      push:
        branches: [main]
    
@@ -75,7 +75,7 @@ By default, this program will run at 11:30 a.m. everyday.
    
    The time cron above is an UTC time, which is 8 hours slower than Beijing time zone.
    
-   By default, this program will run at 11:30 a.m. everyday.
+   By default, this program will run at 8:15 a.m. everyday.
 
 ## License
 
