@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"auto-report/model"
+	"context"
 	"errors"
 	"github.com/devfeel/mapper"
 	"io/ioutil"
@@ -23,7 +24,7 @@ var (
 	COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
 
 	JW_Mirror   = "https://yes.mzz.pub:7002"
-	XGSM_Mirror = "https://yes.mzz.pub:7004"
+	XGSM_Mirror = "http://yes.mzz.pub:7004"
 )
 
 func init() {
@@ -50,7 +51,7 @@ func getLt(client http.Client) (string, error) {
 
 // set mirror trickily
 func setMirror(client http.Client) http.Client {
-	client.Transport = &http.Transport{Dial: func(network string, addr string) (net.Conn, error) {
+	client.Transport = &http.Transport{DialContext: func(ctx context.Context, network string, addr string) (net.Conn, error) {
 		_, port, err := net.SplitHostPort(addr)
 		if err != nil {
 			return nil, err
