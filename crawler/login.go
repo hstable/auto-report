@@ -93,7 +93,7 @@ func login(account, password string) (http.Client, error) {
 		Jar: jar,
 	}
 	// github action
-	if _, ok := os.LookupEnv("GITHUB_TOKEN"); ok {
+	if value := os.Getenv("CI"); value == "true" {
 		client = setMirror(client)
 	}
 	lt, err := getLt(client)
