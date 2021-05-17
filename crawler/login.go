@@ -23,8 +23,8 @@ var (
 	REPORT    = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
 	COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
 
-	JW_Mirror   = "https://yes.mzz.pub:7002"
-	XGSM_Mirror = "http://yes.mzz.pub:7004"
+	JW_Mirror   = "https://185.245.2.16:7002"
+	XGSM_Mirror = "http://185.245.2.16:7004"
 )
 
 func init() {
