@@ -19,9 +19,9 @@ import (
 var (
 	LTURL     = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/shsj/common"
 	LOGINURL  = "https://sso.hitsz.edu.cn:7002/cas/login?service=http://xgsm.hitsz.edu.cn/zhxy-xgzs/common/casLogin?params=L3hnX21vYmlsZS94c0hvbWU="
-	POSTID    = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/csh"
-	REPORT    = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
-	COMMITURL = "http://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
+	POSTID    = "https://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/csh"
+	REPORT    = "https://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/getYqxx"
+	COMMITURL = "https://xgsm.hitsz.edu.cn/zhxy-xgzs/xg_mobile/xs/saveYqxx"
 
 	JW_Mirror   = "https://mr.mzz.pub:7002"
 	XGSM_Mirror = "http://mr.mzz.pub:7004"

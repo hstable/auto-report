@@ -21,19 +21,19 @@ func Report(username, password string) (bool, error) {
 	// 登录学校网站
 	client, err := login(username, password)
 	if err != nil {
-		log.Println(err)
+		log.Println("Report: login: " + err.Error())
 		return false, err
 	}
 	// 获取每日上报 Id
 	id, err := getId(client)
 	if err != nil {
-		log.Println(err)
+		log.Println("Report: getId: " + err.Error())
 		return false, err
 	}
 	// 点击 “新增“，获取默认信息
 	commitData, err := pressNewButton(client, id)
 	if err != nil {
-		log.Println(err)
+		log.Println("Report: pressNewButton: " + err.Error())
 		return false, err
 	}
 	// 检查温度信息
@@ -41,7 +41,7 @@ func Report(username, password string) (bool, error) {
 	// 提交
 	result, err := commit(client, commitData)
 	if err != nil {
-		log.Println(err)
+		log.Println("Report: commit: " + err.Error())
 		return false, err
 	}
 	return result.IsSuccess, nil
@@ -64,14 +64,14 @@ func getId(client http.Client) (string, error) {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Println("getId: client.Do: " + err.Error())
 		return "", err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	var commitResult model.CommitResult
 	err = json.Unmarshal(body, &commitResult)
 	if err != nil {
-		log.Println(err)
+		log.Println("getId: json.Unmarshal: " + err.Error())
 		return "", err
 	}
 	id := commitResult.Module
@@ -84,7 +84,7 @@ func getId(client http.Client) (string, error) {
 func pressNewButton(client http.Client, id string) (model.CommitData, error) {
 	reportId, err := json.Marshal(model.ID{id})
 	if err != nil {
-		log.Println(err)
+		log.Println("pressNewButton: json.Marshal: " + err.Error())
 		return model.CommitData{}, err
 	}
 	params := url.Values{
@@ -99,7 +99,7 @@ func pressNewButton(client http.Client, id string) (model.CommitData, error) {
 	var resultData model.ResultData
 	err = json.Unmarshal(body, &resultData)
 	if err != nil {
-		log.Println(err)
+		log.Println("pressNewButton: json.Unmarshal: " + err.Error())
 		return model.CommitData{}, err
 	}
 	content := resultData.Module.Data[0]
@@ -114,7 +114,7 @@ func commit(client http.Client, commitData model.CommitData) (model.CommitResult
 	var commitResult model.CommitResult
 	cd, err := json.Marshal(commitData)
 	if err != nil {
-		log.Println(err)
+		log.Println("commit: json.Marshal: " + err.Error())
 		return commitResult, err
 	}
 	params := url.Values{
@@ -122,13 +122,13 @@ func commit(client http.Client, commitData model.CommitData) (model.CommitResult
 	}
 	resp, err := client.Post(COMMITURL, "application/x-www-form-urlencoded; charset=UTF-8", strings.NewReader(params.Encode()))
 	if err != nil {
-		log.Println(err)
+		log.Println("commit: client.Post: " + err.Error())
 		return commitResult, err
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(body, &commitResult)
 	if err != nil {
-		log.Println(err)
+		log.Println("commit: json.Unmarshal: " + err.Error())
 		return commitResult, err
 	}
 	return commitResult, nil
